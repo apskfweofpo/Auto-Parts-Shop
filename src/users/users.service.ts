@@ -1,7 +1,8 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
 import {User} from "./users.model";
-import {createUserDto} from "./dto/createuserDto";
+import * as bcrypt from "bcrypt"
+import {CreateUserDto} from "./dto/createUserDto";
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,7 @@ export class UsersService {
         return this.userModel.findOne({...filter})
     }
 
-    async create(createUserDto: createUserDto): Promise<User | { warningMessage: string }> {
+    async create(createUserDto: CreateUserDto): Promise<User | { warningMessage: string }> {
         const user = new User();
         const existingUserByName = await this.findOne({
             where: {username: createUserDto.username },
@@ -28,11 +29,20 @@ export class UsersService {
         })
 
         if (existingUserByEmail) {
-            return {warningMessage: 'Пользователь с таким email существует'}
+            return {warningMessage: 'Пользователь с таким email существует'};
         }
+
         if (existingUserByName) {
-            return {warningMessage: 'Пользователь с таким username существует'}
+            return {warningMessage: 'Пользователь с таким username существует'};
         }
+
+        const hashedPassword = await bcrypt.hash(createUserDto.password, 3);
+
+        user.username = createUserDto.username;
+        user.email = createUserDto.email;
+        user.password = hashedPassword;
+
+        return user.save();
     }
 
 }
