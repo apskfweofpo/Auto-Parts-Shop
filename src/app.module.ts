@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
         load: [databaseConfig]
       }),
       UsersModule,
-      AuthModule],
+      AuthModule
+  ],
 })
 export class AppModule {}
