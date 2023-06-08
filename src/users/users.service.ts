@@ -21,11 +21,11 @@ export class UsersService {
     async create(createUserDto: CreateUserDto): Promise<User | { warningMessage: string }> {
         const user = new User();
         const existingUserByName = await this.findOne({
-            where: {username: createUserDto.username },
+            where: {username: createUserDto.username},
         })
 
         const existingUserByEmail = await this.findOne({
-            where: {username: createUserDto.email },
+            where: {username: createUserDto.email},
         })
 
         if (existingUserByEmail) {
