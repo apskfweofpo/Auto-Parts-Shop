@@ -14,12 +14,13 @@ import {CreateUserDto} from "./dto/createUserDto";
 import {LocalAuthGuard} from "../auth/local.auth.guard";
 import {AuthenticatedGuard} from "../auth/authenticated.guard";
 import {ApiBody, ApiOkResponse} from "@nestjs/swagger";
-import {LoginUserRequest, LoginUserResponse} from "./types";
+import {LoginCheckResponse, LoginUserRequest, LoginUserResponse, LogoutUserResponse, SignupResponse} from "./types";
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
+    @ApiOkResponse({type: SignupResponse})
     @Post('/signup')
     @HttpCode(HttpStatus.CREATED)
     @Header('Content-type', 'application/json')
@@ -39,15 +40,18 @@ export class UsersController {
     }
 
 
+    @ApiOkResponse({type: LoginCheckResponse})
     @Get('/login-check')
     @UseGuards(AuthenticatedGuard)
     loginCheck(@Request() req) {
         return req.user;
     }
 
+
+    @ApiOkResponse({type: LogoutUserResponse})
     @Get('/logout')
     logout(@Request() req) {
         req.session.destroy();
-        return {msg:"session destroyed"};
+        return {msg: "session destroyed"};
     }
 }
