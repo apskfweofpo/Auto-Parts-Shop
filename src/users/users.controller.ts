@@ -13,6 +13,8 @@ import {constants} from "http2";
 import {CreateUserDto} from "./dto/createUserDto";
 import {LocalAuthGuard} from "../auth/local.auth.guard";
 import {AuthenticatedGuard} from "../auth/authenticated.guard";
+import {ApiBody, ApiOkResponse} from "@nestjs/swagger";
+import {LoginUserRequest, LoginUserResponse} from "./types";
 
 @Controller('users')
 export class UsersController {
@@ -26,6 +28,8 @@ export class UsersController {
     }
 
 
+    @ApiBody({type: LoginUserRequest})
+    @ApiOkResponse({type: LoginUserResponse})
     @Post('/login')
     @UseGuards(LocalAuthGuard)
     @HttpCode(HttpStatus.OK)
