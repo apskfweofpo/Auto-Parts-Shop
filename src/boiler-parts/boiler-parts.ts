@@ -9,9 +9,6 @@ export class BoilerParts extends Model {
     price: number;
 
     @Column
-    email: string;
-
-    @Column
     parts_manufacturer: string;
 
     @Column
