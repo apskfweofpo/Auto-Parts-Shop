@@ -35,13 +35,13 @@ export class BoilerPartsService {
         });
     }
 
-    async findOne(id: number): Promise<{ count: number; rows: BoilerParts[] }> {
+    async findOne(id: number | string): Promise<BoilerParts> {
         return this.boilerPartsModel.findOne({
             where: {id},
         });
     }
 
-    async findOneByName(name: String): Promise<{ count: number; rows: BoilerParts[] }> {
+    async findOneByName(name: String): Promise<BoilerParts> {
         return this.boilerPartsModel.findOne({
             where: {name},
         });
@@ -50,7 +50,7 @@ export class BoilerPartsService {
     async searchByString(str: String): Promise<{ count: number; rows: BoilerParts[] }> {
         return this.boilerPartsModel.findAndCountAll({
             limit: 20,
-            where: {name: {[Op.like]: `%$(str)`}},
+            where: {name: {[Op.like]: `%${str}%`}},
         });
     }
 
