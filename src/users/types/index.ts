@@ -11,11 +11,9 @@ export class LoginUserRequest {
 export class LoginUserResponse {
     @ApiProperty({
         example: {
-            user: {
-                userId: "1",
+                userId: "2",
                 username: "Ivan",
                 password: "12345",
-            },
         },
     })
     user: {
