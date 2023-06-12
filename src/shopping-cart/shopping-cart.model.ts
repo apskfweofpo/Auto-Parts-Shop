@@ -5,6 +5,9 @@ export class ShoppingCart extends Model {
     @Column
     user_id: string;
 
+    @Column
+    name: string;
+
     @Column ({defaultValue:0})
     part_id: number;
 
