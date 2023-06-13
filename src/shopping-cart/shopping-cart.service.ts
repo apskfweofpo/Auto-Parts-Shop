@@ -17,7 +17,7 @@ export class ShoppingCartService {
 
     async findAll(userId: number | string): Promise<ShoppingCart[]> {
         return this.shoppingCart.findAll({
-            where: {id: userId}
+            where: {user_id: userId}
         })
     }
 
@@ -34,17 +34,40 @@ export class ShoppingCartService {
         cart.parts_manufacturer = part.parts_manufacturer;
         cart.price = part.price;
         cart.in_stock = part.in_stock;
-        cart.image = JSON.stringify(part.images)[0];
+        cart.image = JSON.parse(part.images)[0];
         cart.name = part.name;
         cart.total_price = part.price;
 
         return cart.save();
     }
 
-    async updateCount(count: number, partId: number): Promise<{ count: number }> {
-        await this.shoppingCart.update({count}, {where: {partId}})
+    async updateCount(count: number, partId: string | number): Promise<{ count: number }> {
+        await this.shoppingCart.update({count}, {where: {part_id: partId}})
 
-        const part = await this.shoppingCart.findOne({where: {partId}});
+        const part = await this.shoppingCart.findOne({where: {part_id: partId}});
         return {count: part.count}
+    }
+
+    async updateTotalPrice(
+        total_price: number,
+        partId: number | string,
+    ): Promise<{ total_price: number }> {
+        await this.shoppingCart.update({total_price}, {where: {part_id: partId}});
+
+        const part = await this.shoppingCart.findOne({where: {part_id: partId}});
+
+        return {total_price: part.total_price};
+    }
+
+    async remove(partId: string | number): Promise<void> {
+        const part = await this.shoppingCart.findOne({where: {partId}})
+
+        await part.destroy;
+
+    }
+
+
+    async removeAll(userId: string| number): Promise<void> {
+        const part = await this.shoppingCart.destroy({where: {user_id: userId}})
     }
 }
