@@ -9,7 +9,6 @@ import {User} from "../../src/users/users.model";
 import * as bcrypt from "bcrypt";
 import * as request from "supertest";
 
-
 const mockedUser = {
     username: 'Jhon',
     email: "jhon@gmail.com",
@@ -38,10 +37,10 @@ describe('Users controller', () => {
     beforeEach(async () => {
         const user = new User();
 
-        const hashedPassword = await bcrypt.hash(createUserDto.password, 3);
+        const hashedPassword = await bcrypt.hash(mockedUser.password, 3);
 
-        user.username = createUserDto.username;
-        user.email = createUserDto.email;
+        user.username = mockedUser.username;
+        user.email = mockedUser.email;
         user.password = hashedPassword;
 
         return user.save();
@@ -49,9 +48,10 @@ describe('Users controller', () => {
 
     afterEach(async () => {
         await User.destroy({where: {username: mockedUser.username}})
+        await User.destroy({where: {username: 'Test'}})
     })
 
-    it('Should create user', () => {
+    it('Should create user', async () => {
 
         const newUser = {
             username: 'test',
@@ -65,7 +65,7 @@ describe('Users controller', () => {
 
         const passwordIsValid = await bcrypt.compare(
             newUser.password,
-            response.body.password
+            response.body.password,
         );
 
         expect(response.body.username).toBe(newUser.username);
