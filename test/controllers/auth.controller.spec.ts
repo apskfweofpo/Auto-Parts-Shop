@@ -78,7 +78,6 @@ describe('Auth controller', () => {
 
 
     it('Should login-check user', async () => {
-
         const login = await request(app.getHttpServer())
             .post('/users/login')
             .send({username: mockedUser.username, password: mockedUser.password});
@@ -89,5 +88,13 @@ describe('Auth controller', () => {
 
         expect(loginCheck.body.username).toBe(mockedUser.username);
         expect(loginCheck.body.email).toBe(mockedUser.email);
+    })
+
+
+    it('Should logout user', async () => {
+        const response = await request(app.getHttpServer())
+            .get('/users/logout')
+
+        expect(response.body.msg).toBe("session destroyed");
     })
 })
