@@ -97,5 +97,68 @@ describe('Boiler parts controller', () => {
         );
     });
 
+    it('Should get bestsellers', async () => {
+
+        const login = await request(app.getHttpServer())
+            .post('/users/login')
+            .send({ username: mockedUser.username, password: mockedUser.password });
+
+
+        const response = await request(app.getHttpServer())
+            .get('/boiler-parts/bestsellers')
+            .set('Cookie', login.headers['set-cookie']);
+
+        expect(response.body.rows).toEqual(
+            expect.arrayContaining([{
+                id: expect.any(Number),
+                price: expect.any(Number),
+                boiler_manufacturer: expect.any(String),
+                parts_manufacturer: expect.any(String),
+                vendor_code: expect.any(String),
+                name: expect.any(String),
+                description: expect.any(String),
+                images: expect.any(String),
+                in_stock: expect.any(Number),
+                bestseller: true,
+                new: expect.any(Boolean),
+                popularity: expect.any(Number),
+                compatibility: expect.any(String),
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+            }]),
+        );
+    });
+
+    it('Should get new', async () => {
+
+        const login = await request(app.getHttpServer())
+            .post('/users/login')
+            .send({ username: mockedUser.username, password: mockedUser.password });
+
+
+        const response = await request(app.getHttpServer())
+            .get('/boiler-parts/new')
+            .set('Cookie', login.headers['set-cookie']);
+
+        expect(response.body.rows).toEqual(
+            expect.arrayContaining([{
+                id: expect.any(Number),
+                price: expect.any(Number),
+                boiler_manufacturer: expect.any(String),
+                parts_manufacturer: expect.any(String),
+                vendor_code: expect.any(String),
+                name: expect.any(String),
+                description: expect.any(String),
+                images: expect.any(String),
+                in_stock: expect.any(Number),
+                bestseller: expect.any(Boolean),
+                new: true,
+                popularity: expect.any(Number),
+                compatibility: expect.any(String),
+                createdAt: expect.any(String),
+                updatedAt: expect.any(String),
+            }]),
+        );
+    });
 
 })
